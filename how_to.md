@@ -1,4 +1,9 @@
 # kubernet canary deployment example
+
+
+![Example Image](https://github.com/MeganLiu/kubernet_canary_deployment.md/issues/1#issue-1730966067)
+
+
 ---
 ### first create an deployment named "myapp"
 ```
