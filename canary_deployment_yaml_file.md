@@ -1,8 +1,7 @@
 # kubernet canary deployment example
 
 ###
-![diagram](https://github.com/MeganLiu/kubernet_canary_deployment.md/issues/1#issue-1730966067)
-
+![image](https://github.com/MeganLiu/kubernet_canary_deployment.md/assets/12657295/f23d3c36-f157-4f53-8e17-d32d8b7a6832)
 ###
 ---
 ### first create an deployment named "sample-deployment"
