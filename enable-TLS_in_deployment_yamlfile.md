@@ -34,7 +34,7 @@ data:
        <crt contents here>
   server.key: |
        <private key contents here>
-	       ```
+```
 	       
 ###. Add TLS block to Ingress Object
 ######## The ingress resource with TLS has to be created in the same namespace where you have the application deployed. So we create the example ingress TLS resource in dev namespace.
