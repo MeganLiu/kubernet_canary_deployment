@@ -2,6 +2,8 @@
 
 
 ![image](https://github.com/MeganLiu/kubernet_canary_deployment/assets/12657295/9637e345-af5a-4bca-8172-daa30445f7eb)
+
+![image](https://github.com/MeganLiu/kubernet_canary_deployment/assets/12657295/ffa96290-c5d3-4f74-860e-00b6164e7f90)
 Nginx Annotations 支持以下 4 种 Canary 规则：
 
 nginx.ingress.kubernetes.io/canary-by-header：基于 Request Header 的流量切分，适用于灰度发布以及 A/B 测试。当 Request Header 设置为 always时，请求将会被一直发送到 Canary 版本；当 Request Header 设置为 never时，请求不会被发送到 Canary 入口；对于任何其他 Header 值，将忽略 Header，并通过优先级将请求与其他金丝雀规则进行优先级的比较。
