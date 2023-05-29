@@ -1,6 +1,7 @@
 # kubernet canary deployment example
 ---
 ### first create an deployment named "myapp"
+```
 apiVersion: apps/v1
 
 kind: Deployment
@@ -36,9 +37,10 @@ spec:
         ports:
         
         - containerPort: 8080
-
+```
 ---
 ### second expose the deployment as servcie  
+```
 apiVersion: v1
 
 kind: Service 
@@ -53,9 +55,10 @@ spec:
     port: 80
     targetPort: 8080
 
-
+```
 ---
 ### create a new deployment  for  new image 'myapp:2.0" named "myapp-canary"
+```
 apiVersion: apps/v1
 
 kind: Deployment
@@ -134,4 +137,4 @@ spec:
             port:
             
               number: 80
-
+```
