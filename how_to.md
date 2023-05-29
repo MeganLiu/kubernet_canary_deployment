@@ -1,6 +1,6 @@
 # kubernet canary deployment example
 ---
-###first create an deployment named "myapp"
+### first create an deployment named "myapp"
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,7 +22,7 @@ spec:
         - containerPort: 8080
 
 ---
-###second expose the deployment as servcie  
+### second expose the deployment as servcie  
 apiVersion: v1
 kind: Service
 metadata:
@@ -59,7 +59,7 @@ spec:
         - containerPort: 8080
 
 ---
-
+### define Ingress service
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
