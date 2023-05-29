@@ -39,7 +39,8 @@ data:
 ###. Add TLS block to Ingress Object
 ######## The ingress resource with TLS has to be created in the same namespace where you have the application deployed. So we create the example ingress TLS resource in dev namespace.
 
-Save the following YAML as ingress.yaml. .
+Save the following YAML as ingress.yaml. 
+	       
 ```
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -63,8 +64,11 @@ spec:
               name: hello-service
               port:
                 number: 80
-	       ```
+ ```
+	       
 As you can see, I have added the TLS block with the hostname (demo.mlopshub.com) and tls secret we created in the previous step. I have created the self-signed TLS certificate with emo.mlopshub.com domain.
+	       
+	       
 ```
 tls:
   - hosts:
