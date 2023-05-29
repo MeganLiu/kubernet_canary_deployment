@@ -11,3 +11,5 @@ For example, in the Nginx controller, the SSL certificates are dynamically handl
 ssl_certificate_by_lua_block {
 			certificate.call()
 		}
+		
+		https://devopscube.com/wp-content/uploads/2022/03/ingress-tls-1.png
