@@ -8,138 +8,129 @@
 ### first create an deployment named "myapp"
 ```
 apiVersion: apps/v1
-
 kind: Deployment
-
 metadata:
-
-  name: myapp
-  
+  name: sample-deployment
+  labels:
+    app: nginx
 spec:
   replicas: 3
-  
   selector:
-  
     matchLabels:
-    
-      app: myapp
-      
+      app: nginx
   template:
-  
     metadata:
-    
       labels:
-      
-        app: myapp
-        
+        app: nginx
     spec:
       containers:
-      
-      - name: myapp
-      
-        image: myapp:1.0
-        
+      - name: nginx
+        image: nginx:1.14.2
         ports:
-        
         - containerPort: 8080
 ```
 ---
 ### second expose the deployment as servcie  
 ```
 apiVersion: v1
-
-kind: Service 
-
+kind: Service
 metadata:
-  name: myapp
+  name: sample-service
 spec:
   selector:
-    app: myapp
+    app: nginx
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8080
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
 
+```
+
+```
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-example
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  labels:
+    app: nginx
+
+spec:
+  rules:
+  -host: example.com
+  - http:
+      paths:
+      - path: /
+        backend:
+          service:
+            name: sample-service
+            port:
+              number: 80
 ```
 ---
 ### create a new deployment  for  new image 'myapp:2.0" named "myapp-canary"
 ```
+---
 apiVersion: apps/v1
-
 kind: Deployment
-
 metadata:
-
-  name: myapp-canary
-  
+  name: canary-deployment
+  labels:
+    app: nginx-canary
 spec:
-
-
   replicas: 1
-  
   selector:
-  
     matchLabels:
-    
-      app: myapp-canary
-      
+      app: nginx-canary
   template:
-  
     metadata:
-    
       labels:
-      
-        app: myapp-canary
-        
+        app: nginx-canary
     spec:
-    
       containers:
-      
-      - name: myapp
-      
-        image: myapp:2.0
-        
+      - name: nginx-canary
+        image: nginx:1.23.1
         ports:
-        
         - containerPort: 8080
 
+```
+
+```
 ---
-### define Ingress service
-
-apiVersion: networking.k8s.io/v1
-
-kind: Ingress
-
+apiVersion: v1
+kind: Service
 metadata:
-
-  name: myapp-ingress
-  
-  annotations:
-  
-    nginx.ingress.kubernetes.io/canary: "true"
-    
-    nginx.ingress.kubernetes.io/canary-by-header: "Cookie"
-    
-    nginx.ingress.kubernetes.io/canary-by-header-value: "canary"
-    
+  name: canary-service
 spec:
+  selector:
+    app: nginx-canary
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+### define Ingress service for canary
 
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: canary-ingress
+  label:
+    app: nginx-canary
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "20"
+spec:
   rules:
-  
+  -host: example.com
   - http:
-  - 
       paths:
-      
       - path: /
-      - pathType: Prefix
-      - 
         backend:
-        
           service:
-          
-            name: myapp-canary
-            
+            name: canary-service
             port:
-            
               number: 80
 ```
