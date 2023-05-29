@@ -1,6 +1,6 @@
- Nginx Ingress Controller 实现了项目的网关，作为项目对外的流量入口和项目中各个服务的反向代理。而 Ingress-Nginx 支持配置 Ingress Annotations 来实现不同场景下的灰度发布和测试，可以满足金丝雀发布、蓝绿部署与 A/B 测试等业务场景。
+ Nginx Ingress Controller suppport configrating  Ingress Annotations  to  realized gray/AB testing depoyemnt 
 
-
+You have to enable "nginx.ingress.kubernetes.io/canary: "true". 
 ![image](https://github.com/MeganLiu/kubernet_canary_deployment/assets/12657295/9637e345-af5a-4bca-8172-daa30445f7eb)
 
 ![image](https://github.com/MeganLiu/kubernet_canary_deployment/assets/12657295/ffa96290-c5d3-4f74-860e-00b6164e7f90)
