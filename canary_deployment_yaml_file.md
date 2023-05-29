@@ -10,63 +10,81 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sample-deployment
+  name: production
   labels:
-    app: nginx
+    app: production
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: production
   template:
     metadata:
       labels:
-        app: nginx
+        app: production
     spec:
       containers:
-      - name: nginx
-        image: nginx:1.14.2
+      - name: production
+        image: mirrorgooglecontainers/echoserver:1.10
         ports:
         - containerPort: 8080
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+
+
 ```
 ---
 ### second expose the deployment as servcie  
 ```
+---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: sample-service
+  name: production
+  labels:
+    app: production
 spec:
-  selector:
-    app: nginx
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: production
 
 ```
-### define Ingress service to route traffice to 'nginx' deployment
+### define Ingress service to route traffic to deployment
 ```
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ingress-example
+  name: production
   annotations:
     kubernetes.io/ingress.class: nginx
-  labels:
-    app: nginx
-
 spec:
   rules:
-  -host: example.com
-  - http:
-      paths:
-      - path: /
-        backend:
-          service:
-            name: sample-service
-            port:
-              number: 80
+  - host: kubesphere.io
+    http:
+      paths: */
+      - backend:
+          serviceName: production
+          servicePort: 80
 ```
 ---
 ### create a new deployment  for  new image named "canary-deployment"
@@ -75,24 +93,43 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: canary-deployment
+  name: canary
   labels:
-    app: nginx-canary
+    app: canary
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx-canary
+      app: canary
   template:
     metadata:
       labels:
-        app: nginx-canary
+        app: canary
     spec:
       containers:
-      - name: nginx-canary
-        image: nginx:1.23.1
+      - name: canary
+        image: mirrorgooglecontainers/echoserver:1.10
         ports:
         - containerPort: 8080
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+
+
 
 ```
 ### expose canary deployment as canary service
@@ -101,36 +138,36 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: canary-service
+  name: canary
+  labels:
+    app: canary
 spec:
-  selector:
-    app: nginx-canary
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: canary
 ---
 ### define Ingress service for canary with "nginx Ingress controller", set weight to be 20
 
----
+
+```
+
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: canary-ingress
-  label:
-    app: nginx-canary
+  name: canary
   annotations:
+    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/canary: "true"
-    nginx.ingress.kubernetes.io/canary-weight: "20"
+    nginx.ingress.kubernetes.io/canary-weight: "30"
 spec:
   rules:
-  -host: example.com
-  - http:
-      paths:
-      - path: /
-        backend:
-          service:
-            name: canary-service
-            port:
-              number: 80
-```
+  - host: kubesphere.io
+    http:
+      paths: /
+      - backend:
+          serviceName: canary
+          servicePort: 80
