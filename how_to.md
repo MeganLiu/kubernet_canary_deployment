@@ -5,7 +5,7 @@
 
 ###
 ---
-### first create an deployment named "myapp"
+### first create an deployment named "sample-deployment"
 ```
 apiVersion: apps/v1
 kind: Deployment
@@ -45,7 +45,7 @@ spec:
       targetPort: 8080
 
 ```
-
+### define Ingress service to route traffice to 'nginx' deployment
 ```
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -69,7 +69,7 @@ spec:
               number: 80
 ```
 ---
-### create a new deployment  for  new image 'myapp:2.0" named "myapp-canary"
+### create a new deployment  for  new image named "canary-deployment"
 ```
 ---
 apiVersion: apps/v1
@@ -95,7 +95,7 @@ spec:
         - containerPort: 8080
 
 ```
-
+### expose canary deployment as canary service
 ```
 ---
 apiVersion: v1
@@ -110,7 +110,7 @@ spec:
       port: 80
       targetPort: 8080
 ---
-### define Ingress service for canary
+### define Ingress service for canary with "nginx Ingress controller", set weight to be 20
 
 ---
 apiVersion: extensions/v1beta1
