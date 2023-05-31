@@ -1,0 +1,2 @@
+####  Load balancer + Ingress service + Ingress controller + canary policy + TLS (security)
+to distrubute traffic to different pods in the backedn with load balencer 
