@@ -12,18 +12,14 @@ Example output
 NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
 nodejs-ex   ClusterIP   172.30.197.157   <none>        8080/TCP   70s
 
- oc project myproject
+$ oc project myproject
 Run the oc expose service command to expose the route:
-
-
 $ oc expose service nodejs-ex
 Example output
-
 route.route.openshift.io/nodejs-ex exposed
 To verify that the service is exposed, you can use a tool, such as cURL, to make sure the service is accessible from outside the cluster.
 
 Use the oc get route command to find the route’s host name:
-
 
 $ oc get route
 Example output
