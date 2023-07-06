@@ -136,5 +136,38 @@ spec:
               protocol: TCP
 
 
+Service.yaml file 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-service
+spec:
+  selector:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  type: {{ .Values.service.type }}
+  ports:
+    - protocol: {{ .Values.service.protocol | default "TCP" }}
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+
+pipe ( | )  is used to define the default value of the protocol as TCP.
+
+
+configmap.yaml and add the following contents to it.  the default Nginx index.html page  is replaced with a custom HTML page. Also,  a template directive  is added to replace the environment name in HTML.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-index-html-configmap
+  namespace: default
+data:
+  index.html: |
+    <html>
+    <h1>Welcome</h1>
+    </br>
+    <h1>Hi! deployement in {{ .Values.env.name }} Environment using Helm Chart </h1>
+    </html
+
 
 
