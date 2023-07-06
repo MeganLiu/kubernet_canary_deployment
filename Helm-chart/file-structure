@@ -32,3 +32,72 @@ templates/NOTES.txt: This is a plaintext file that gets printed out after the ch
 templates/_helpers.tpl: That file contains several methods and sub-template. These files are not rendered to Kubernetes object definitions but are available everywhere within other chart templates for use. 
 templates/tests/: We can define tests in our charts to validate that your chart works as expected when it is installed. 
 
+$helm create nginx-chart
+
+Replace the default contents of chart.yaml with the following.
+
+apiVersion: v2
+name: nginx-chart
+description: My First Helm Chart
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+maintainers:
+- email: contact@xx.com
+  name: xxx
+
+apiVersion: This denotes the chart API version. v2 is for Helm 3 and v1 is for previous versions.
+name: Denotes the name of the chart.
+description: Denotes the description of the helm chart.
+Type: The chart type can be either ‘application’ or ‘library’. Application charts are what you deploy on Kubernetes. Library charts are re-usable charts that can be used with other charts. A similar concept of libraries in programming.
+Version: This denotes the chart version. 
+appVersion: This denotes the version number of our application (Nginx). 
+maintainers: Information about the owner of the chart.
+You should increment the version and appVersion each time we make changes to the application.
+There are some other fields also like dependencies, icons, etc. 
+
+et’s remove all default files from the template directory.
+
+rm -rf templates/*
+We will add our Nginx YAML files and change them to the template for better understanding.
+
+Create a deployment.yaml file and copy the following contents.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: "nginx:1.16.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+If you see the above YAML file, the values are static. The idea of a helm chart is to template the YAML files so that we can reuse them in multiple environments by dynamically assigning values to them.
+
+To template a value, all you need to do is add the object parameter inside curly braces as shown below. It is called a template directive and the syntax is specific to the Go templating
+
+{{ .Object.Parameter }}
+First Let’s understand what is an Object. Following are the three Objects we are going to use in this example.
+
+Release: Every helm chart will be deployed with a release name. If you want to use the release name or access release-related dynamic values inside the template, you can use the release object.
+Chart: If you want to use any values you mentioned in the chart.yaml, you can use the chart object.
+Values: All parameters inside values.yaml file can be accessed using the Values object.
+
+
+
+
