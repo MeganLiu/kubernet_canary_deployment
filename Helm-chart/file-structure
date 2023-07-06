@@ -3,3 +3,32 @@ Helm charts are a combination of Kubernetes YAML manifest templates and helm-spe
 You can call it a helm package. 
 Since the Kubernetes YAML manifest can be templated, you don’t have to maintain multiple helm charts of different environments. 
 Helm uses the go templating engine for the templating functionality.
+
+m Charts reduce the complexity and kubernetes manifest redundancy of 
+each environment (dev, uat, cug, prod) with only one template.
+
+Nginx-chart/
+|-- Chart.yaml
+|-- charts
+|-- templates
+|   |-- NOTES.txt
+|   |-- _helpers.tpl
+|   |-- deployment.yaml
+|   |-- configmap.yaml
+|   |-- ingress.yaml
+|   |-- service.yaml
+|   `-- tests
+|       `-- test-connection.yaml
+`-- values.yaml
+
+here are helm-specific files and folders. Let’s look at each file and directory inside a helm chart and understand its importance.
+
+.helmignore: It is used to define all the files that not included in the helm chart. It works similarly to the .gitignore file.
+Chart.yaml: It contains information about the helm chart like version, name, description, etc.
+values.yaml: This file defines the values for the YAML templates. For example, image name, replica count, HPA values, etc. As we explained earlier only the values.yaml file changes in each environment. Also, you can override these values dynamically or at the time of installing the chart using --values or --set command.
+charts: user can n add another chart’s structure inside this directory if the  main charts have some dependency on others. By default this directory is empty.
+templates: This directory contains all the Kubernetes manifest files that form an application. These manifest files can be templated to access values from values.yaml file. Helm creates some default templates for Kubernetes objects like deployment.yaml, service.yaml etc, which we can use directly, modify, or override with our files.
+templates/NOTES.txt: This is a plaintext file that gets printed out after the chart is successfully deployed. 
+templates/_helpers.tpl: That file contains several methods and sub-template. These files are not rendered to Kubernetes object definitions but are available everywhere within other chart templates for use. 
+templates/tests/: We can define tests in our charts to validate that your chart works as expected when it is installed. 
+
