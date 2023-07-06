@@ -107,5 +107,34 @@ Replicas: {{ .Values.replicaCount }}  access the replica value from the values.y
 image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}" Multiple template directives are used in a single line and accessing the repository and tag information under the image key from the Values file.
 
 
+Templated  
+deployment.yaml file after applying the templates. The templated part is highlighted in bold. Replace the deployment file contents with the following.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-nginx
+  labels:
+    app: nginx
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+
+
 
 
