@@ -1,0 +1,5 @@
+Helm chart is  a collection of files that will have the description of Kubernetes clusters and resources.
+Helm charts are a combination of Kubernetes YAML manifest templates and helm-specific files. 
+You can call it a helm package. 
+Since the Kubernetes YAML manifest can be templated, you don’t have to maintain multiple helm charts of different environments. 
+Helm uses the go templating engine for the templating functionality.
