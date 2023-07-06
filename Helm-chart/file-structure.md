@@ -167,7 +167,25 @@ data:
     <h1>Welcome</h1>
     </br>
     <h1>Hi! deployement in {{ .Values.env.name }} Environment using Helm Chart </h1>
-    </html
+    </html>
+
+values.yaml
+The values.yaml file contains all the values that need to be substituted in the template directives we used in the template
+
+place the default values.yaml content with the following.
+
+replicaCount: 2
+image:
+  repository: nginx
+  tag: "1.16.0"
+  pullPolicy: IfNotPresent
+service:
+  name: nginx-service
+  type: ClusterIP
+  port: 80
+  targetPort: 9000
+env:
+  name: dev
 
 
 
