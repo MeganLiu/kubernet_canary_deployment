@@ -189,3 +189,28 @@ env:
 
 
 
+
+helm install frontend nginx-chart
+
+w a single helm chart can be used for multiple environments using different values.yaml files. To install a helm chart with external values.yaml file, you can use the following command with the --values flag and path of the values file.
+
+$helm install frontend nginx-chart --values env/prod-values.yaml
+When you have Helm as part of your CI/CD pipeline, you can write custom logic to pass the required values file depending on the environment.
+
+if  the version is needed to roll back to the specific version, you can put the revision number like this.
+
+helm rollback <release-name> <revision-number>
+For example,
+
+$helm rollback frontend 2
+
+Uninstall The Helm Release
+To uninstall the helm release use uninstall command. It will remove all of the resources associated with the last release of the chart.
+
+$helm uninstall frontend
+We can package the chart and deploy it to Github, S3, or any other platform.
+
+$helm package frontend
+
+
+
