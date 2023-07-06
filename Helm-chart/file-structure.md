@@ -102,5 +102,10 @@ Values (values.yaml): All parameters inside values.yaml file can be accessed usi
 ![image](https://user-images.githubusercontent.com/12657295/251477565-9c947e9e-45a2-440d-9916-e715912f03bc.png)
 
 
+container name: {{ .Chart.Name }}: For the container name, Chart object is used  and use the chart name from the chart.yaml as the container name.
+Replicas: {{ .Values.replicaCount }}  access the replica value from the values.yaml file.
+image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}" Multiple template directives are used in a single line and accessing the repository and tag information under the image key from the Values file.
+
+
 
 
